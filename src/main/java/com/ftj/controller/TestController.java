@@ -1,5 +1,6 @@
 package com.ftj.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -10,6 +11,9 @@ import java.util.Map;
 @RestController
 public class TestController {
 
+    @Value("${pro.hello:HELLO}")
+    private String hello;
+
     @GetMapping("/hello")
     public String hello() {
         return "hello wiki";
@@ -17,6 +21,6 @@ public class TestController {
 
     @PostMapping("/hello/post")
     public String helloPost(String name) {
-        return "Hello World! Post," + name;
+        return "Hello World! Post," + hello;
     }
 }
