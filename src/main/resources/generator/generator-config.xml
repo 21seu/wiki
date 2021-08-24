@@ -37,11 +37,11 @@
 
         <!-- mapper类的位置 -->
         <javaClientGenerator targetProject="src\main\java"
-                             targetPackage="com.jftj.mapper"
+                             targetPackage="com.ftj.mapper"
                              type="XMLMAPPER"/>
 
         <!--<table tableName="demo" domainObjectName="Demo"/>-->
-        <!--<table tableName="ebook"/>-->
+        <table tableName="ebook"/>
         <!--<table tableName="category"/>-->
         <!--<table tableName="doc"/>-->
         <!--<table tableName="content"/>-->
