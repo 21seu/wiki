@@ -6,6 +6,7 @@ import com.ftj.mapper.EbookMapper;
 import com.ftj.req.EbookReq;
 import com.ftj.resp.EbookResp;
 import com.ftj.service.EbookService;
+import com.ftj.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,13 @@ public class EbookServiceImpl implements EbookService {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%" + req.getName() + "%");
-        List<EbookResp> ebookRespList = new ArrayList<>();
         List<Ebook> ebooks = ebookMapper.selectByExample(ebookExample);
-        ebooks.forEach(e->{
-            EbookResp ebookResp = new EbookResp();
-            BeanUtils.copyProperties(e,ebookResp);
+        /*List<EbookResp> ebookRespList = new ArrayList<>();
+        ebooks.forEach(e -> {
+            EbookResp ebookResp = CopyUtil.copy(e, EbookResp.class);
             ebookRespList.add(ebookResp);
-        });
-        return ebookRespList;
+        });*/
+        return CopyUtil.copyList(ebooks, EbookResp.class);
+
     }
 }
