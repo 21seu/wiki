@@ -9,6 +9,7 @@ import com.ftj.service.EbookService;
 import com.ftj.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class EbookServiceImpl implements EbookService {
     public List<EbookResp> list(EbookReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        criteria.andNameLike("%" + req.getName() + "%");
+        if (!ObjectUtils.isEmpty(req.getName())) {
+            criteria.andNameLike("%" + req.getName() + "%");
+        }
         List<Ebook> ebooks = ebookMapper.selectByExample(ebookExample);
         /*List<EbookResp> ebookRespList = new ArrayList<>();
         ebooks.forEach(e -> {
