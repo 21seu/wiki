@@ -3,8 +3,6 @@
         <a-layout-sider width="200" style="background: #fff">
             <a-menu
                     mode="inline"
-                    v-model:selectedKeys="selectedKeys2"
-                    v-model:openKeys="openKeys"
                     :style="{ height: '100%', borderRight: 0 }"
             >
                 <a-sub-menu key="sub1">
@@ -54,9 +52,17 @@
 </template>
 
 <script>
+    import axios from 'axios';
     // @ is an alias to /src
 
     export default {
-        name: 'Home'
+        name: 'Home',
+        created() {
+            console.log("created");
+            axios.get("http://localhost:8080/ebook/list")
+                .then(response => {
+                    console.log(response)
+                })
+        }
     }
 </script>
