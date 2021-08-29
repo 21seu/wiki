@@ -106,7 +106,7 @@
         },
         mounted() {
             let _this = this;
-            axios.get("http://localhost:8080/ebook/list")
+            axios.get("/ebook/list")
                 .then(response => {
                     const data = response.data;
                     _this.ebooks = data.content;
