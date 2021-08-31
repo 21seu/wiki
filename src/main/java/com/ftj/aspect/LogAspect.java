@@ -32,7 +32,7 @@ public class LogAspect {
     /**
      * 定义一个切点
      */
-    @Pointcut("execution(public * com.ftj.controller.*(..))")
+    @Pointcut("execution(* com.ftj.controller.*.*(..) )")
     public void controllerPointcut() {
 
     }
