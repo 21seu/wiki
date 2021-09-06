@@ -5,8 +5,11 @@ import com.ftj.domain.EbookExample;
 import com.ftj.mapper.EbookMapper;
 import com.ftj.req.EbookReq;
 import com.ftj.resp.EbookResp;
+import com.ftj.resp.PageResp;
 import com.ftj.service.EbookService;
 import com.ftj.util.CopyUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -26,19 +29,21 @@ public class EbookServiceImpl implements EbookService {
 
 
     @Override
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebooks = ebookMapper.selectByExample(ebookExample);
-        /*List<EbookResp> ebookRespList = new ArrayList<>();
-        ebooks.forEach(e -> {
-            EbookResp ebookResp = CopyUtil.copy(e, EbookResp.class);
-            ebookRespList.add(ebookResp);
-        });*/
-        return CopyUtil.copyList(ebooks, EbookResp.class);
+        List<EbookResp> ebookRespList = CopyUtil.copyList(ebooks, EbookResp.class);
+
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebooks);
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(ebookRespList);
+        return pageResp;
 
     }
 }

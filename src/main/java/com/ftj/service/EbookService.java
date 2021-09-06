@@ -3,6 +3,7 @@ package com.ftj.service;
 import com.ftj.domain.Ebook;
 import com.ftj.req.EbookReq;
 import com.ftj.resp.EbookResp;
+import com.ftj.resp.PageResp;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface EbookService {
 
-    List<EbookResp> list(EbookReq req);
+    PageResp<EbookResp> list(EbookReq req);
 }
