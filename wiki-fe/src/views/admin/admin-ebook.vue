@@ -40,7 +40,7 @@
             return {
                 pagination: {
                     current: 1,
-                    pageSize: 2,
+                    pageSize: 4,
                     total: 0
                 },
                 ebooks: [],
@@ -76,12 +76,19 @@
             handleQuery: function (params) {
                 //this.loading = true;
                 const _this = this;
-                axios.get("/ebook/list", params).then(resp => {
+                axios.get("/ebook/list", {
+                    //左边params固定的
+                    params: {
+                        page: params.page,
+                        size: params.size
+                    }
+                }).then(resp => {
                     console.log(resp.data.content);
-                    _this.ebooks = resp.data.content;
+                    _this.ebooks = resp.data.content.list;
 
                     //重置分页按钮
-                    if (params) _this.pagination.current = params.page;
+                    _this.pagination.current = params.page;
+                    _this.pagination.total = resp.data.content.total;
                 });
             },
             handleTableChange: function (pagination) {
@@ -95,7 +102,10 @@
         },
 
         created() {
-            this.handleQuery();
+            this.handleQuery({
+                page: 1,
+                size: this.pagination.pageSize
+            });
         }
         ,
 
