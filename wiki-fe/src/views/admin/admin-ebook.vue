@@ -1,41 +1,59 @@
 <template>
-    <a-layout>
-        <a-layout-content
-                :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
-        >
-            <a-table
-                    :columns="columns"
-                    :data-source="ebooks"
-                    :row-key="record => record.id"
-                    :pagination="pagination"
-                    :loading="loading"
-                    @change="handleTableChange"
+    <div>
+        <a-layout>
+            <a-layout-content
+                    :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
             >
-                <template slot="cover" slot-scope="text, record">
-                    <img class="ant-avatar" :src="record.cover" alt="avatar"/>
-                </template>
-                <template v-slot:action="{ text: record }">
-                    <a-space size="small">
-                        <a-button type="primary">
-                            编辑
-                        </a-button>
-                        <a-button type="danger">
-                            删除
-                        </a-button>
-                    </a-space>
-                </template>
-            </a-table>
-        </a-layout-content>
-    </a-layout>
-    <a-modal
-            title="电子书表单"
-            :visible="visible"
-            :confirm-loading="confirmLoading"
-            @ok="handleOk"
-            @cancel="handleCancel"
-    >
-        <p>{{ ModalText }}</p>
-    </a-modal>
+                <a-table
+                        :columns="columns"
+                        :data-source="ebooks"
+                        :row-key="record => record.id"
+                        :pagination="pagination"
+                        :loading="loading"
+                        @change="handleTableChange"
+                >
+                        <template slot="cover" slot-scope="text, record">
+                            <img class="ant-avatar" :src="record.cover" alt="avatar"/>
+                        </template>
+                        <template v-slot:action=" text, record ">
+                            <a-space size="small">
+                                <a-button type="primary" @click="edit(record)">
+                                    编辑
+                                </a-button>
+                                <a-button type="danger" @click="handleCancel">
+                                    删除
+                                </a-button>
+                            </a-space>
+                        </template>
+                </a-table>
+            </a-layout-content>
+        </a-layout>
+        <a-modal
+                title="电子书表单"
+                :visible="modalVisible"
+                :confirm-loading="confirmLoading"
+                @ok="handleOk"
+                @cancel="handleCancel"
+        >
+            <a-form :model="ebooks" :label-col="{span : 6}" :wrapper-col="{ span: 18 }">
+                <a-form-item label="封面">
+                    <a-input v-model:value="ebooks.cover" />
+                </a-form-item>
+                <a-form-item label="名称">
+                    <a-input v-model:value="ebooks.name" />
+                </a-form-item>
+                <a-form-item label="分类一">
+                    <a-input v-model:value="ebooks.category1Id" />
+                </a-form-item>
+                <a-form-item label="分类二">
+                    <a-input v-model:value="ebooks.category2Id" />
+                </a-form-item>
+                <a-form-item label="描述">
+                    <a-input type="text" v-model:value="ebooks.description" />
+                </a-form-item>
+            </a-form>
+        </a-modal>
+    </div>
 </template>
 
 <script>
@@ -77,7 +95,9 @@
                         key: 'action',
                         scopedSlots: {customRender: 'action'},
                     },
-                ]
+                ],
+                modalVisible: false,
+                confirmLoading: false
             }
         },
 
@@ -106,8 +126,24 @@
                     page: pagination.current,
                     size: pagination.pageSize
                 });
-            }
-            ,
+            },
+            // ---- 表单 ----
+            edit: function (record) {
+                this.modalVisible = true;
+                console.log(record)
+                this.ebooks = record;
+            },
+            handleOk(e) {
+                this.confirmLoading = true;
+                setTimeout(() => {
+                    this.modalVisible = false;
+                    this.confirmLoading = false;
+                }, 2000);
+            },
+            handleCancel(e) {
+                console.log('Clicked cancel button');
+                this.modalVisible = false;
+            },
         },
 
         created() {
