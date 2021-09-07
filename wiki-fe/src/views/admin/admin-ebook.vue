@@ -27,6 +27,15 @@
             </a-table>
         </a-layout-content>
     </a-layout>
+    <a-modal
+            title="电子书表单"
+            :visible="visible"
+            :confirm-loading="confirmLoading"
+            @ok="handleOk"
+            @cancel="handleCancel"
+    >
+        <p>{{ ModalText }}</p>
+    </a-modal>
 </template>
 
 <script>
