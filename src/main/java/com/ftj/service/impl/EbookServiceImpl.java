@@ -46,4 +46,12 @@ public class EbookServiceImpl implements EbookService {
         return pageResp;
 
     }
+
+    @Override
+    public void save(Ebook ebook) {
+        //新增
+        if (ObjectUtils.isEmpty(ebook.getId())) ebookMapper.insert(ebook);
+        //更新
+        else ebookMapper.updateByPrimaryKey(ebook);
+    }
 }

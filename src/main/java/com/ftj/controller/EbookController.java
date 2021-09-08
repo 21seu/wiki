@@ -1,5 +1,6 @@
 package com.ftj.controller;
 
+import com.ftj.domain.Ebook;
 import com.ftj.req.EbookReq;
 import com.ftj.resp.CommonResp;
 import com.ftj.resp.EbookResp;
@@ -24,6 +25,13 @@ public class EbookController {
         CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
         PageResp<EbookResp> list = ebookService.list(req);
         resp.setContent(list);
+        return resp;
+    }
+
+    @PostMapping("/save")
+    public CommonResp save(@RequestBody Ebook ebook) {
+        CommonResp<Object> resp = new CommonResp<>();
+        ebookService.save(ebook);
         return resp;
     }
 }

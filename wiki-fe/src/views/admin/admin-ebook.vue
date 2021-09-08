@@ -12,19 +12,19 @@
                         :loading="loading"
                         @change="handleTableChange"
                 >
-                        <template slot="cover" slot-scope="text, record">
-                            <img class="ant-avatar" :src="record.cover" alt="avatar"/>
-                        </template>
-                        <template v-slot:action=" text, record ">
-                            <a-space size="small">
-                                <a-button type="primary" @click="edit(record)">
-                                    编辑
-                                </a-button>
-                                <a-button type="danger" @click="handleCancel">
-                                    删除
-                                </a-button>
-                            </a-space>
-                        </template>
+                    <template slot="cover" slot-scope="text, record">
+                        <img class="ant-avatar" :src="record.cover" alt="avatar"/>
+                    </template>
+                    <template v-slot:action=" text, record ">
+                        <a-space size="small">
+                            <a-button type="primary" @click="edit(record)">
+                                编辑
+                            </a-button>
+                            <a-button type="danger" @click="handleCancel">
+                                删除
+                            </a-button>
+                        </a-space>
+                    </template>
                 </a-table>
             </a-layout-content>
         </a-layout>
@@ -37,19 +37,19 @@
         >
             <a-form :model="ebooks" :label-col="{span : 6}" :wrapper-col="{ span: 18 }">
                 <a-form-item label="封面">
-                    <a-input v-model:value="ebooks.cover" />
+                    <a-input v-model:value="ebooks.cover"/>
                 </a-form-item>
                 <a-form-item label="名称">
-                    <a-input v-model:value="ebooks.name" />
+                    <a-input v-model:value="ebooks.name"/>
                 </a-form-item>
                 <a-form-item label="分类一">
-                    <a-input v-model:value="ebooks.category1Id" />
+                    <a-input v-model:value="ebooks.category1Id"/>
                 </a-form-item>
                 <a-form-item label="分类二">
-                    <a-input v-model:value="ebooks.category2Id" />
+                    <a-input v-model:value="ebooks.category2Id"/>
                 </a-form-item>
                 <a-form-item label="描述">
-                    <a-input type="text" v-model:value="ebooks.description" />
+                    <a-input type="text" v-model:value="ebooks.description"/>
                 </a-form-item>
             </a-form>
         </a-modal>
@@ -133,12 +133,23 @@
                 console.log(record)
                 this.ebooks = record;
             },
-            handleOk(e) {
+            handleOk() {
                 this.confirmLoading = true;
-                setTimeout(() => {
-                    this.modalVisible = false;
-                    this.confirmLoading = false;
-                }, 2000);
+                axios.post("/ebook/save", this.ebooks).then(response => {
+                    const data = response.data;
+                    if (data.success) {
+                        this.modalVisible = false;
+                        this.confirmLoading = false;
+                        //重新加载列表
+                        this.handleQuery({
+                            //查询当前分页组件所在的页码
+                            page: this.pagination.current,
+                            size: this.pagination.pageSize
+                        })
+                    } else {
+                        this.$message.error('数据修改失败');
+                    }
+                })
             },
             handleCancel(e) {
                 console.log('Clicked cancel button');

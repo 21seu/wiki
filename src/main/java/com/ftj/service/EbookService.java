@@ -13,4 +13,10 @@ import java.util.List;
 public interface EbookService {
 
     PageResp<EbookResp> list(EbookReq req);
+
+    /**
+     * 保存
+     * @param ebook
+     */
+    void save(Ebook ebook);
 }
