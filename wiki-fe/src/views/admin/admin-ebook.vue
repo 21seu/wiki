@@ -4,6 +4,11 @@
             <a-layout-content
                     :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
             >
+                <p>
+                    <a-button size="large" type="primary" @click="add">
+                        新增
+                    </a-button>
+                </p>
                 <a-table
                         :columns="columns"
                         :data-source="ebooks"
@@ -35,21 +40,21 @@
                 @ok="handleOk"
                 @cancel="handleCancel"
         >
-            <a-form :model="ebooks" :label-col="{span : 6}" :wrapper-col="{ span: 18 }">
+            <a-form :model="ebook" :label-col="{span : 6}" :wrapper-col="{ span: 18 }">
                 <a-form-item label="封面">
-                    <a-input v-model:value="ebooks.cover"/>
+                    <a-input v-model:value="ebook.cover"/>
                 </a-form-item>
                 <a-form-item label="名称">
-                    <a-input v-model:value="ebooks.name"/>
+                    <a-input v-model:value="ebook.name"/>
                 </a-form-item>
                 <a-form-item label="分类一">
-                    <a-input v-model:value="ebooks.category1Id"/>
+                    <a-input v-model:value="ebook.category1Id"/>
                 </a-form-item>
                 <a-form-item label="分类二">
-                    <a-input v-model:value="ebooks.category2Id"/>
+                    <a-input v-model:value="ebook.category2Id"/>
                 </a-form-item>
                 <a-form-item label="描述">
-                    <a-input type="text" v-model:value="ebooks.description"/>
+                    <a-input type="text" v-model:value="ebook.description"/>
                 </a-form-item>
             </a-form>
         </a-modal>
@@ -97,7 +102,8 @@
                     },
                 ],
                 modalVisible: false,
-                confirmLoading: false
+                confirmLoading: false,
+                ebook: {},
             }
         },
 
@@ -131,11 +137,11 @@
             edit: function (record) {
                 this.modalVisible = true;
                 console.log(record)
-                this.ebooks = record;
+                this.ebook = record;
             },
             handleOk() {
                 this.confirmLoading = true;
-                axios.post("/ebook/save", this.ebooks).then(response => {
+                axios.post("/ebook/save", this.ebook).then(response => {
                     const data = response.data;
                     if (data.success) {
                         this.modalVisible = false;
@@ -155,6 +161,10 @@
                 console.log('Clicked cancel button');
                 this.modalVisible = false;
             },
+            add: function () {
+                this.modalVisible = true;
+                this.ebook = [];
+            }
         },
 
         created() {

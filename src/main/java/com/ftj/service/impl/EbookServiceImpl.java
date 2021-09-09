@@ -8,6 +8,7 @@ import com.ftj.resp.EbookResp;
 import com.ftj.resp.PageResp;
 import com.ftj.service.EbookService;
 import com.ftj.util.CopyUtil;
+import com.ftj.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,9 @@ public class EbookServiceImpl implements EbookService {
 
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
 
     @Override
@@ -50,7 +54,10 @@ public class EbookServiceImpl implements EbookService {
     @Override
     public void save(Ebook ebook) {
         //新增
-        if (ObjectUtils.isEmpty(ebook.getId())) ebookMapper.insert(ebook);
+        if (ObjectUtils.isEmpty(ebook.getId())) {
+            ebook.setId(snowFlake.nextId());
+            ebookMapper.insert(ebook);
+        }
         //更新
         else ebookMapper.updateByPrimaryKey(ebook);
     }
