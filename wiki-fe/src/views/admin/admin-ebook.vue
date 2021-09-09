@@ -141,6 +141,7 @@
             },
             handleOk() {
                 this.confirmLoading = true;
+                console.log(this.ebook)
                 axios.post("/ebook/save", this.ebook).then(response => {
                     const data = response.data;
                     if (data.success) {
@@ -163,7 +164,7 @@
             },
             add: function () {
                 this.modalVisible = true;
-                this.ebook = [];
+                this.ebook = {};
             }
         },
 
