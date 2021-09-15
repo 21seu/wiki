@@ -19,4 +19,6 @@ public interface EbookService {
      * @param ebook
      */
     void save(Ebook ebook);
+
+    void delete(Long id);
 }

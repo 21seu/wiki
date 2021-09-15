@@ -25,9 +25,18 @@
                             <a-button type="primary" @click="edit(record)">
                                 编辑
                             </a-button>
-                            <a-button type="danger" @click="handleCancel">
-                                删除
-                            </a-button>
+                            <a-popconfirm
+                                    title="删除后不可恢复，确认删除吗？"
+                                    ok-text="是"
+                                    cancel-text="否"
+                                    @confirm="handleDelete(record.id)"
+                                    @cancel="cancel"
+                            >
+                                <a-button type="danger">
+                                    删除
+                                </a-button>
+                            </a-popconfirm>
+
                         </a-space>
                     </template>
                 </a-table>
@@ -162,9 +171,25 @@
                 console.log('Clicked cancel button');
                 this.modalVisible = false;
             },
+            cancel(e) {
+                console.log(e);
+                this.$message.error('你已经取消删除');
+            },
             add: function () {
                 this.modalVisible = true;
                 this.ebook = {};
+            },
+            handleDelete(id) {
+                axios.delete("/ebook/delete/" + id).then(response => {
+                    const data = response.data; // data = commonResp
+                    console.log("delete data ====>", data);
+                    if (data.success) {
+                        this.handleQuery({
+                            page: this.pagination.current,
+                            size: this.pagination.pageSize
+                        })
+                    }
+                })
             }
         },
 
