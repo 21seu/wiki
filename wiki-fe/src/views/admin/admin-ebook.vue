@@ -81,7 +81,7 @@
             return {
                 pagination: {
                     current: 1,
-                    pageSize: 4,
+                    pageSize: 1001,
                     total: 0
                 },
                 ebooks: [],
@@ -127,12 +127,14 @@
                         size: params.size
                     }
                 }).then(resp => {
-                    console.log(resp.data.content);
-                    _this.ebooks = resp.data.content.list;
-
-                    //重置分页按钮
-                    _this.pagination.current = params.page;
-                    _this.pagination.total = resp.data.content.total;
+                    if (resp.data.success) {
+                        _this.ebooks = resp.data.content.list;
+                        //重置分页按钮
+                        _this.pagination.current = params.page;
+                        _this.pagination.total = resp.data.content.total;
+                    } else {
+                        message.error(resp.data.message);
+                    }
                 });
             },
             handleTableChange: function (pagination) {

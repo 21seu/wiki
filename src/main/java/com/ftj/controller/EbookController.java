@@ -9,6 +9,7 @@ import com.ftj.service.EbookService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * Created by fengtj on 2021/8/24 23:37
@@ -21,7 +22,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp list(EbookReq req) {
+    public CommonResp list(@Valid EbookReq req) {
         CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
         PageResp<EbookResp> list = ebookService.list(req);
         resp.setContent(list);
@@ -29,7 +30,7 @@ public class EbookController {
     }
 
     @PostMapping("/save")
-    public CommonResp save(@RequestBody Ebook ebook) {
+    public CommonResp save(@Valid @RequestBody Ebook ebook) {
         CommonResp<Object> resp = new CommonResp<>();
         ebookService.save(ebook);
         return resp;
