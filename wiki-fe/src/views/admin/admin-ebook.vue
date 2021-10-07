@@ -127,6 +127,7 @@
                         size: params.size
                     }
                 }).then(resp => {
+                    console.log("resp ====> ",resp)
                     if (resp.data.success) {
                         _this.ebooks = resp.data.content.list;
                         //重置分页按钮
@@ -135,6 +136,8 @@
                     } else {
                         message.error(resp.data.message);
                     }
+                }).catch(e => {
+                    message.error(e.message);
                 });
             },
             handleTableChange: function (pagination) {
