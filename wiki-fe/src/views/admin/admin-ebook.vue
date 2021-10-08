@@ -5,9 +5,23 @@
                     :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
             >
                 <p>
-                    <a-button size="large" type="primary" @click="add">
-                        新增
-                    </a-button>
+                    <a-form layout="inline" :model="param">
+                        <a-form-item>
+                            <a-input v-model="param.name" placeholder="书名">
+                                <a-icon slot="prefix" type="book" style="color:rgba(0,0,0,.25)"/>
+                            </a-input>
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" @click="handleQuery({page:1,size:pagination.pageSize})">
+                                查询
+                            </a-button>
+                        </a-form-item>
+                        <a-form-item>
+                            <a-button type="primary" @click="add">
+                                新增
+                            </a-button>
+                        </a-form-item>
+                    </a-form>
                 </p>
                 <a-table
                         :columns="columns"
@@ -81,7 +95,7 @@
             return {
                 pagination: {
                     current: 1,
-                    pageSize: 1001,
+                    pageSize: 4,
                     total: 0
                 },
                 ebooks: [],
@@ -113,21 +127,24 @@
                 modalVisible: false,
                 confirmLoading: false,
                 ebook: {},
+                param: {}
             }
         },
 
         methods: {
             handleQuery: function (params) {
-                //this.loading = true;
+                this.loading = true;
                 const _this = this;
                 axios.get("/ebook/list", {
                     //左边params固定的
                     params: {
                         page: params.page,
-                        size: params.size
+                        size: params.size,
+                        name: _this.param.name
                     }
                 }).then(resp => {
-                    console.log("resp ====> ",resp)
+                    this.loading = false;
+                    console.log("resp ====> ", resp)
                     if (resp.data.success) {
                         _this.ebooks = resp.data.content.list;
                         //重置分页按钮
