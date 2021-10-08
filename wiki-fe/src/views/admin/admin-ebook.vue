@@ -87,6 +87,7 @@
 <script>
     import axios from "axios";
     import {message} from "ant-design-vue";
+    import {isEmpty, isNotEmpty, copy} from "../../util/tool"
 
     export default {
         name: "AdminEbook",
@@ -168,7 +169,7 @@
             edit: function (record) {
                 this.modalVisible = true;
                 console.log(record)
-                this.ebook = record;
+                this.ebook = copy(record);
             },
             handleOk() {
                 this.confirmLoading = true;
